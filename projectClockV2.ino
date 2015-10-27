@@ -3,13 +3,13 @@
 LiquidCrystal_I2C  lcd(0x27,2,1,0,4,5,6,7);
 #include "screen.h"
 #include "clock.h"
-const int MIN_RAW_DATA_LENGTH = 28;
-const int MAX_RAW_DATA_LENGTH = 37;
+const int MIN_RAW_DATA_LENGTH = 30;
+const int MAX_RAW_DATA_LENGTH = 39;
 char raw[MAX_RAW_DATA_LENGTH] = {};
-double values[11] = {};
+double values[12] = {};
 
-//8:19:12:26:9:2015:0:13.4:82:24.0:40-
-//8:3:2:1:1:2015:0:2.0:5:1.0:5-
+//22:59:41:27:10:2015:0:10.4:98:24.0:39:0-
+
 void setup() {
     Serial.begin(9600);
     initialize();
@@ -21,15 +21,15 @@ void loop() {
     byte readedBytes = Serial.readBytesUntil('-' ,raw, MAX_RAW_DATA_LENGTH);
     if(readedBytes >= MIN_RAW_DATA_LENGTH && readedBytes <= MAX_RAW_DATA_LENGTH) {
       //Si entra aquí es que ha leido correctamente los bytes
-      Serial.print("Se han leido : ");
-      Serial.println(readedBytes, DEC);
+      //Serial.print("Se han leido : ");
+      //Serial.println(readedBytes, DEC);
       //Hacemos un split en el char[] y guardamos los valores
       char *pointer = strtok(raw, ":");
       int counter = 0;
       while(pointer != NULL && counter <= sizeof(values)) {
         values[counter] = strtod(pointer, NULL);
-        Serial.print("Introduciendo el valor en el array: ");
-        Serial.println(values[counter]);
+        //Serial.print("Introduciendo el valor en el array: ");
+        //Serial.println(values[counter]);
         pointer = strtok(NULL, ":");
         counter++;
       }
@@ -59,8 +59,17 @@ void updateValues() {
   int hum = values[8];
   double localTemp = values[9];
   int localHum = values[10];
-  updateTime(hour, min, sec, day, month, year);
-  updateWeather(temp, hum, localTemp, localHum);  
-  printSync(false);
+  int operation = values[11];
+  switch(operation) {
+    case 1:
+        changeBacklightState();
+    break;
+    case 2: break;
+    default: 
+        updateTime(hour, min, sec, day, month, year);
+        updateWeather(temp, hum, localTemp, localHum);  
+        printSync(false);
+    break;
+  }
 }
 

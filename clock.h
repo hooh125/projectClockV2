@@ -9,6 +9,7 @@ int sec = 0;
 int day = 0;
 int month = 0;
 int year = 0;
+bool pomodoro = false;
 
 unsigned long previousMillis = 0;
 

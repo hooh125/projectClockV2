@@ -4,6 +4,7 @@ boolean DigitOn = LOW;
 boolean DigitOff = HIGH;
 boolean SegOn = HIGH;
 boolean SegOff = LOW;
+boolean backlight = false;
 int DigitPins[] = {2, 3, 4, 5};
 int SegmentPins[] = {6, 7, 8, 9, 10, 11, 12, 13};
 
@@ -75,6 +76,7 @@ void initLCD() {
   lcd.setBacklight(HIGH);
   lcd.begin(16, 2);
   lcd.backlight();
+  backlight = true;
   lcd.setCursor(10, 0);
   lcd.print((char)223);
   lcd.print("C");
@@ -169,6 +171,16 @@ void draw() {
     //Turn the relevant segment off
     digitalWrite(SegmentPins[seg], SegOff);
   } //end of for
+}
+
+void changeBacklightState() {
+  if(backlight) {
+    backlight = false;
+    lcd.noBacklight();
+  } else {
+    backlight = true;
+    lcd.backlight();
+  }
 }
 
 void updateWeather(double temp, int humidity, double localTemp, int localHum) {
