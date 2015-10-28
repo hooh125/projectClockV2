@@ -64,7 +64,9 @@ void updateValues() {
     case 1:
         changeBacklightState();
     break;
-    case 2: break;
+    case 2:
+        changePomodoroStatus();
+    break;
     default: 
         updateTime(hour, min, sec, day, month, year);
         updateWeather(temp, hum, localTemp, localHum);  
