@@ -4,7 +4,7 @@ boolean DigitOn = LOW;
 boolean DigitOff = HIGH;
 boolean SegOn = HIGH;
 boolean SegOff = LOW;
-boolean backlight = false;
+boolean backlight = true;
 int DigitPins[] = {2, 3, 4, 5};
 int SegmentPins[] = {6, 7, 8, 9, 10, 11, 12, 13};
 
@@ -72,11 +72,12 @@ int calculateDigits(double value) {
 }
 
 void initLCD() {
-  lcd.setBacklightPin(3,POSITIVE);
-  lcd.setBacklight(HIGH);
   lcd.begin(16, 2);
-  lcd.backlight();
-  backlight = true;
+  if(backlight) {
+    lcd.backlight();
+  } else {
+    lcd.noBacklight();
+  }
   lcd.setCursor(10, 0);
   lcd.print((char)223);
   lcd.print("C");
