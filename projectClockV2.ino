@@ -10,6 +10,33 @@ double values[12] = {};
 
 //22:59:41:27:10:2015:0:10.4:98:24.0:39:0-
 
+void updateValues() {
+  int hour = values[0];
+  int min = values[1];
+  int sec = values[2];
+  int day = values[3];
+  int month = values[4];
+  int year = values[5];
+  double temp = values[7];
+  int hum = values[8];
+  double localTemp = values[9];
+  int localHum = values[10];
+  int operation = values[11];
+  switch(operation) {
+    case 1:
+        changeBacklightState();
+    break;
+    case 2:
+        changePomodoroStatus();
+    break;
+    default:
+        updateTime(hour, min, sec, day, month, year);
+        updateWeather(temp, hum, localTemp, localHum);
+        printSync(false);
+    break;
+  }
+}
+
 void setup() {
     Serial.begin(9600);
     initialize();
@@ -47,31 +74,3 @@ void loop() {
   clockContinue();
   draw();
 }
-
-void updateValues() {
-  int hour = values[0];
-  int min = values[1];
-  int sec = values[2];
-  int day = values[3];
-  int month = values[4];
-  int year = values[5];
-  double temp = values[7];
-  int hum = values[8];
-  double localTemp = values[9];
-  int localHum = values[10];
-  int operation = values[11];
-  switch(operation) {
-    case 1:
-        changeBacklightState();
-    break;
-    case 2:
-        changePomodoroStatus();
-    break;
-    default: 
-        updateTime(hour, min, sec, day, month, year);
-        updateWeather(temp, hum, localTemp, localHum);  
-        printSync(false);
-    break;
-  }
-}
-

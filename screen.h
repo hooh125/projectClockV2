@@ -54,6 +54,7 @@ int U[] = {LOW, HIGH, HIGH, HIGH, HIGH, HIGH, LOW, LOW};
 int Y[] = {LOW, HIGH, HIGH, HIGH, LOW, HIGH, HIGH, LOW};
 //Array of pointers for the 4 digits
 int* lights[4];
+int rawDigits[4];
 
 int calculateDigits(double value) {
   int digits = 0;
@@ -119,6 +120,7 @@ void initialize() {
 
 void updateDigits(int digit[4]) {
   for (int i = 0; i < 4; i++) {
+    rawDigits[i] = digit[i];
     if (i != 1) {
       switch (digit[i]) {
         case 0: lights[i] = N0; break;
@@ -158,11 +160,15 @@ void draw() {
     digitalWrite(SegmentPins[seg], SegOn);
 
     //For each digit, turn relevant digits on
-    for (byte digit = 0; digit < 4; digit++) {
+    for (int digit = 0; digit < 4; digit++) {
       if (lights[digit][seg] == 1) {
-        digitalWrite(DigitPins[digit], DigitOn);
+        if(digit == 0 && rawDigits[0] == 0) {
+          digitalWrite(DigitPins[digit], DigitOff);
+        } else {
+          digitalWrite(DigitPins[digit], DigitOn);
+        }
       }
-      //delay(200); //Uncomment this to see it in slow motion
+      //delay(500); //Uncomment this to see it in slow motion
     }
     //Turn all digits off
     for (byte digit = 0; digit < 4; digit++) {
@@ -198,4 +204,3 @@ void updateWeather(double temp, int humidity, double localTemp, int localHum) {
   lcd.setCursor(15 - localHumDigits, 1);
   lcd.print(localHum);
 }
-
